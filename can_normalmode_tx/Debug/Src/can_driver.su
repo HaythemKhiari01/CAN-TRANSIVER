@@ -1,0 +1,7 @@
+D:/STM32/chip_header/CMSIS/Include/core_cm4.h:1684:22:__NVIC_EnableIRQ	16	static,ignoring_inline_asm
+../Src/can_driver.c:7:6:can_gpio_init	8	static
+../Src/can_driver.c:35:6:can_parms_init	16	static
+../Src/can_driver.c:61:6:can_start	4	static
+../Src/can_driver.c:72:9:can_add_tx_message	32	static
+../Src/can_driver.c:130:9:can_get_rx_message	24	static
+../Src/can_driver.c:194:6:can_filter_config	16	static
