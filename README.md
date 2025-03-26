@@ -1,67 +1,82 @@
-# CAN Bus DC Motor Control with STM32F407
+# STM32F4 CAN Transceiver Project
 
-## Overview
-This project implements a **DC motor control system** using the **Controller Area Network (CAN) protocol** on an **STM32F407 microcontroller**. The system utilizes different CAN modes, including **normal mode, loopback mode, and driver mode**, to transmit and receive data efficiently.
-
-## Features
-- **CAN Communication:** Implements **normal mode, loopback mode, and driver mode**.
-- **Real-Time Data Transmission:** Uses CAN bus to send and receive motor control signals.
-- **ADC Integration:** Reads sensor values and transmits them via CAN.
-- **Interrupt-Based Message Handling:** Efficiently processes CAN messages using **ISR (Interrupt Service Routines)**.
-- **Modular Code Structure:** Separate modules for CAN driver, UART, ADC, and GPIO.
+## Project Overview
+This project demonstrates CAN (Controller Area Network) communication using an STM32F4 microcontroller in different operational modes, including Normal Mode and Loopback Mode.
 
 ## Project Structure
-```
-can_dc_motor_control/
-├── can_driver/         # CAN driver source files
-├── can_normalmode_rx/  # Normal mode receiver source
-├── can_normalmode_tx/  # Normal mode transmitter source
-├── can_loopback/       # Loopback mode source
-```
+The project contains four main source files:
+- `can_normal_mode_rx.c`: Normal mode receiver implementation
+- `can_normal_mode_tx.c`: Normal mode transmitter implementation
+- `can_driver.c`: CAN driver source file
+- `can_loopback.c`: Loopback mode implementation for internal testing
 
-## Requirements
-- **STM32F407 Discovery Board**
-- **STM32CubeIDE**
-- **GCC ARM Toolchain**
-- **CAN Bus Transceiver (e.g., MCP2551, SN65HVD230)**
-- **DC Motor and Motor Driver (e.g., L298N, DRV8833)**
+## Key Features
+- CAN communication in Normal and Loopback modes
+- ADC (Analog-to-Digital Converter) integration
+- Interrupt-driven CAN message reception
+- Configurable CAN parameters
 
-## Installation & Compilation
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/HaythemKhiari01/CAN-TRANSIVER.git
-   ```
-2. Open the project in **STM32CubeIDE**.
-3. Build and flash the firmware to the STM32F407 board.
+## Hardware Requirements
+- STM32F4 microcontroller
+- CAN transceiver
+- ADC-capable pin (PA1 used in this implementation)
+- LED for visual feedback
 
-## CAN Modes Implementation
-### **Normal Mode (Receiver & Transmitter)**
-- **`can_normalmode_rx.c`**: Receives CAN messages and processes motor control commands.
-- **`can_normalmode_tx.c`**: Reads sensor values via ADC and transmits data over CAN.
+## Software Components
+- FPU (Floating-Point Unit) initialization
+- Timebase initialization
+- GPIO configuration
+- CAN communication setup
+- ADC reading and conversion
 
-### **Loopback Mode**
-- **`can_loopback.c`**: Tests CAN communication by sending and receiving messages within the same microcontroller.
+## CAN Configuration
+- Standard ID mode
+- Configurable CAN ID (0x244 and 0x544 used in examples)
+- Data Length Code (DLC) of 2 bytes
+- Interrupt-based message reception
 
-### **CAN Driver**
-- **`can_driver.c`**: Implements CAN initialization, message transmission, and reception using interrupts.
+## Main Functionality
+1. Initialize microcontroller peripherals
+2. Configure CAN communication
+3. Set up ADC reading
+4. Transmit ADC values over CAN
+5. Handle received CAN messages via interrupt
 
-## Usage
-The application transmits ADC sensor data via CAN and toggles an LED upon message reception:
-1. **Receiver (RX Mode)**:
-   - Waits for CAN messages.
-   - Toggles an LED when a message is received.
-2. **Transmitter (TX Mode)**:
-   - Reads ADC sensor values.
-   - Sends sensor data via CAN.
+## Modes of Operation
+### Normal Mode
+- Actual network communication
+- Transmits ADC readings
+- Receives CAN messages
 
-## Future Improvements
-- Implement **bidirectional motor control** using CAN commands.
-- Add **error handling and message filtering**.
-- Optimize **power efficiency and timing**.
+### Loopback Mode
+- Internal testing mode
+- Sends predefined messages to itself
+- Verifies CAN communication without external network
 
-## License
-This project is provided AS-IS under the **STMicroelectronics License**.
+## Interrupt Handling
+- `CAN1_RX0_IRQHandler()` manages incoming CAN messages
+- Increments a message count
+- Toggles LED (in receive mode)
 
----
-*Developed using STM32CubeIDE & STM32F4 HAL Libraries.*
+## Compilation Notes
+- Requires STM32F4xx HAL libraries
+- Depends on custom headers: 
+  - `can_driver.h`
+  - `uart.h`
+  - `bsp.h`
+  - `fpu.h`
+  - `adc.h`
+  - `timebase.h`
+
+## Potential Improvements
+- Add error handling
+- Implement more sophisticated message processing
+- Add configuration for different CAN bit rates
+- Implement bidirectional communication
+
+## Troubleshooting
+- Ensure proper CAN transceiver connections
+- Verify interrupt configuration
+- Check ADC initialization
+- Validate CAN filter settings
 
